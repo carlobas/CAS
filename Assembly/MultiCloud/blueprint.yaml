@@ -1,0 +1,54 @@
+# CCG
+# Basic blueprint to choose environment & network
+# Requieres to be define tags for Cloud Zones, Networkprofile, and flavors/image
+formatVersion: 1
+inputs:
+  size:
+    type: string
+    title: Size
+    description: Select VM size
+    enum:
+      - Small
+      - Medium
+      - Large
+    default: Small
+  environment:
+    type: string
+    title: Environment
+    description: Select environment to deploy to
+    enum:
+      - 'env:Development'
+      - 'env:Production'
+    default: 'env:Development'
+  network:
+    type: string
+    title: Network
+    description: Select network to connect to
+    enum:
+      - 'nettype:Management'
+      - 'nettype:Service'
+    default: 'nettype:Management'
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      image: CentOS
+      flavor: '${input.size}'
+      constraints:
+        - tag: '${input.environment}'
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+  Cloud_Network_1:
+    type: Cloud.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      networkType: existing
+      constraints:
+        - tag: '${input.network}'
