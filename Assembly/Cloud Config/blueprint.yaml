@@ -1,0 +1,53 @@
+name: CloudConfig on Cloud
+formatVersion: 1
+inputs:
+  hostname:
+    type: string
+    description: Hostname for this VM
+    title: Hostname
+  user:
+    type: string
+    description: User used for SSH access
+    default: demouser
+    title: SSH user
+  password:
+    type: string
+    description: Password for SSH user
+    title: SSH user password
+    pattern: '[a-z0-9A-Z@#$]+'
+    encrypted: true
+  sshport:
+    type: integer
+    title: SSH Port
+    description: Change default ssh port (between 22 and 1024)
+    default: 22
+    minimum: 22
+    maximum: 1024
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      image: AWSUbuntu
+      flavor: C101VRA01Small
+      constraints:
+        - tag: 'env:Cloud'
+      cloudConfig: |
+        #cloud-config
+        hostname: ${input.hostname}
+
+        users:
+          - name: ${input.user}        
+            sudo: ['ALL=(ALL) NOPASSWD:ALL']
+            groups: sudo
+            shell: /bin/bash
+        runcmd:
+          - PASS=${input.password}     
+          - USER=${input.user}
+          - echo $USER:$PASS | /usr/sbin/chpasswd
+          - sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          - sed -i "s/Port 22/Port ${input.sshport}/g" /etc/ssh/sshd_config
+          - service ssh restart
