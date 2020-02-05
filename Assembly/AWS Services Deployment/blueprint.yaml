@@ -1,0 +1,46 @@
+# CCG 
+# Cloud services demo for AWS(EC2, S3 & Route 53)
+formatVersion: 1
+inputs:
+  dnsname:
+    type: string
+    title: DNS Entry (.iberiase.org)
+resources:
+  Cloud_Service_AWS_Route53_Record_1:
+    type: Cloud.Service.AWS.Route53.Record
+    dependsOn:
+      - Cloud_AWS_EC2_Instance_1
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      name: '${input.dnsname}'
+      type: A
+      zone_id: ZLPC6T6H05CDM
+      provider: AWS Internal CCG
+      provider_region: eu-central-1
+      ttl: 300
+      records:
+        - '${Cloud_AWS_EC2_Instance_1.address}'
+  Cloud_AWS_EC2_Instance_1:
+    type: Cloud.AWS.EC2.Instance
+    metadata:
+      layoutPosition:
+        - 0
+        - 1
+    properties:
+      image: Ubuntu
+      flavor: small
+  Cloud_Service_AWS_S3_Bucket_1:
+    type: Cloud.Service.AWS.S3.Bucket
+    dependsOn:
+      - Cloud_AWS_EC2_Instance_1
+    metadata:
+      layoutPosition:
+        - 0
+        - 2
+    properties:
+      provider: AWS Internal CCG
+      provider_region: eu-central-1
+      acl: private
