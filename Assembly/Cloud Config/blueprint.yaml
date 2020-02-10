@@ -2,6 +2,7 @@
 # CloudConfig (cloud-init) demo. Use only with Cloud providers, no vSphere
 name: CloudConfig - cloud-init
 formatVersion: 1
+version: 1.0
 inputs:
   hostname:
     type: string
