@@ -1,8 +1,8 @@
 # CCG
 # CloudConfig (cloud-init) demo. Use only with Cloud providers, no vSphere
-name: CloudConfig - cloud-init
+name: CloudConfig
 formatVersion: 1
-version: 1.0
+version: 1.1
 inputs:
   hostname:
     type: string
