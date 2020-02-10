@@ -1,5 +1,6 @@
 # CCG 
 # Ansible integration demo
+name: Ansible integration
 formatVersion: 1
 inputs: {}
 resources:

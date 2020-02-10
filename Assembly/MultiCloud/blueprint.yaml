@@ -1,6 +1,7 @@
 # CCG
 # Basic blueprint to choose environment & network
 # Requieres to be define tags for Cloud Zones, Networkprofile, and flavors/image
+name: Basic blueprint
 formatVersion: 1
 inputs:
   size:
