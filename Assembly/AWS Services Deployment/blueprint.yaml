@@ -1,6 +1,7 @@
 # CCG 
 # Cloud services demo for AWS(EC2, S3 & Route 53)
 name: AWS Services
+version: 1.0
 formatVersion: 1
 inputs:
   dnsname:
