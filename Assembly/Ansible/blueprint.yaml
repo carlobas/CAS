@@ -1,7 +1,7 @@
 # CCG 
 # Ansible integration demo
 name: Ansible integration
-version: 1.0
+version: 1.1
 formatVersion: 1
 inputs: {}
 resources:
@@ -14,9 +14,9 @@ resources:
     properties:
       host: '${resource.Cloud_vSphere_Machine_1.*}'
       osType: linux
-      account: Iberia.local ansible
+      account: seiberia.lab ansible
       username: root
-      password: 
+      password: ${secret.AnsibleLinuxPassword}
       playbooks:
         provision:
           - /root/playbooks/linux-apache.yml
@@ -27,9 +27,8 @@ resources:
         - 0
         - 1
     properties:
-      folderName: Howarts Cloud
-      image: C101VRA01CentOS
-      flavor: C101VRA01Small
+      image: CentOS7
+      flavor: Small
       networks:
         - network: '${resource.Cloud_vSphere_Network_1.id}'
           assignment: static
