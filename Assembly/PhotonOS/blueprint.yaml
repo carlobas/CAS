@@ -1,0 +1,38 @@
+formatVersion: 1
+inputs:
+  environment:
+    type: string
+    title: Environment
+    description: Select environment
+    enum:
+      - env:Production
+      - env:Development
+    default: env:Production
+resources:
+  Cloud_vSphere_Machine_1:
+    type: Cloud.vSphere.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      registerDNS: 'true'
+      customizationSpec: Linux
+      image: PhotonOS
+      flavor: Medium
+      constraints:
+        - tag: ${input.environment}
+      networks:
+        - network: ${resource.Cloud_vSphere_Network_1.id}
+          assignment: static
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      networkType: existing
+      constraints:
+        - tag: nettype:Management
+
