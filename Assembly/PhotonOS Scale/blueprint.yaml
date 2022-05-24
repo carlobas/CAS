@@ -1,0 +1,49 @@
+formatVersion: 1
+inputs:
+  poolsize:
+    type: integer
+    default: 2
+    maximum: 5
+    minimum: 1
+    description: Select pool size
+  environment:
+    type: string
+    title: Environment
+    description: Select environment
+    enum:
+      - env:Production
+      - env:Development
+    default: env:Production
+resources:
+  Cloud_vSphere_Machine_1:
+    type: Cloud.vSphere.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      count: ${input.poolsize}
+      registerDNS: 'true'
+      image: PhotonOS
+      flavor: Medium
+      constraints:
+        - tag: ${input.environment}
+      networks:
+        - network: ${resource.Cloud_vSphere_Network_1.id}
+          assignment: static
+      cloudConfig: |
+        #cloud-init
+
+        preserve_hostname:false
+        hostname: ${self.name}
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      networkType: existing
+      constraints:
+        - tag: nettype:Management
+
