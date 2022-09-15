@@ -1,0 +1,55 @@
+formatVersion: 1
+inputs:
+  Disk1Size:
+    type: integer
+    minimum: 0
+    maximum: 100
+    description: Max size for secondary disk. 0 means no additional disk
+  NP:
+    type: string
+    description: Select Network Profile
+    title: Network Profile
+  Net1:
+    type: string
+    description: Select your network
+    title: Network select
+  CustomNameUser:
+    type: string
+    description: Enter part of the custom name for the machine
+    title: VM Custom Name
+resources:
+  Cloud_vSphere_Machine_1:
+    type: Cloud.vSphere.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      CustomNameUser: ${input.CustomNameUser}
+      image: CentOS8
+      flavor: Small
+      networks:
+        - network: ${resource.Cloud_vSphere_Network_1.id}
+      attachedDisks: ${map_to_object(resource.Cloud_vSphere_Disk_1[*].id, "source")}
+  Cloud_vSphere_Disk_1:
+    type: Cloud.vSphere.Disk
+    metadata:
+      layoutPosition:
+        - 0
+        - 1
+    properties:
+      capacityGb: ${input.Disk1Size}
+      count: '${input.Disk1Size == 0 ? 0 : 1}'
+      maxDiskCapacityInGB: 100
+      persistent: false
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      networkType: existing
+      constraints:
+        - tag: ${input.Net1}
+
